@@ -1,7 +1,7 @@
 require 'settings'
 
 describe Settings, "when initialised" do
-  before(:all) do
+  before(:each) do
     @settings = Settings.new
   end
 
