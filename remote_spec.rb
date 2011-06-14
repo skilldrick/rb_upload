@@ -42,4 +42,19 @@ describe Remote do
     @remote.ascii?('test/text.txt').should == true
     @remote.ascii?('test/image.jpg').should == false
   end
+
+  it "should be able to see whether directories exist" do
+    connect
+    does_exist = '/public_html'
+    does_not_exist = '/blahdiblahblah'
+    @remote.dir_exists?(does_exist).should == true
+    @remote.dir_exists?(does_not_exist).should == false
+  end
+
+  it "should make directory" do
+    connect
+    remote_path = '/public_html/upload_testing/testdir'
+    @remote.make_dir remote_path
+    @remote.dir_exists?(remote_path).should == true
+  end
 end

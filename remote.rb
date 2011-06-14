@@ -18,6 +18,19 @@ class Remote
     @ftp.list
   end
 
+  def make_dir path
+    unless dir_exists? path
+      @ftp.mkdir path
+    end
+  end
+
+  def dir_exists? path
+    @ftp.chdir path
+    return true
+  rescue Net::FTPPermError
+    return false
+  end
+
   def upload(from_path, to_path)
     if ascii? from_path
       @ftp.puttextfile(from_path, to_path)

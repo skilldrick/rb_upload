@@ -28,7 +28,7 @@ describe Local do
   end
 
   it "should get size of file" do
-    Local.filesize('test_files/file1.txt').should == 23
+    Local.filesize('test_files/file1.txt').should == 22
   end
 end
 
