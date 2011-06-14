@@ -7,7 +7,7 @@ class Local
     @directory = directory
   end
 
-  def filesize path
+  def self.filesize path
     File.size path
   end
 

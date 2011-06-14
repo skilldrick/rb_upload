@@ -4,6 +4,10 @@ class Remote
   attr_accessor :connected
   @@ascii_extensions = ['txt',  'php', 'html']
 
+  def filesize path
+    @ftp.size path
+  end
+
   def connect(credentials)
     @ftp = Net::FTP.new(credentials.machine)
     @ftp.passive = true
