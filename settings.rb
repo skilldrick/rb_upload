@@ -11,11 +11,6 @@ class Settings
     @data[site_name]
   end
 
-  def site_credentials site_name
-    host = site_data(site_name)['host']
-    get_login_from_host host
-  end
-
   def load_yaml
     File.open('upload_settings.yml') do |file|
       @data = YAML::load(file)
@@ -25,6 +20,10 @@ class Settings
   def get_login_from_host(host)
     @netrc = Net::Netrc.locate(host) or raise ".netrc or host not found"
     @netrc.login
+  end
+
+  def method_missing msg
+    @data[msg.to_s]
   end
 end
 

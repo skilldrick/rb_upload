@@ -3,3 +3,12 @@ development:
 
 production:
   host: ftp.production.co.uk
+
+ignored_prefixes:
+  - 'ignored_dir'
+  - '.git'
+
+ignored_suffixes:
+  - '.swp'
+
+local_directory: 'test_files'

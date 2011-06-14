@@ -9,7 +9,9 @@ class RbUpload
   end
 
   def get_local_files
-    @local_files = LocalFiles.new ['ignored_dir'], ['.swp'], 'test_files'
+    @local_files = LocalFiles.new(
+      @settings.ignored_prefixes, @settings.ignored_suffixes, @settings.local_directory
+    )
     @local_files.get_files
   end
 
