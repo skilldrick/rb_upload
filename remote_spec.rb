@@ -13,6 +13,10 @@ describe Remote do
     @remote = Remote.new
   end
 
+  after(:each) do
+    @remote.close
+  end
+
   it "should connect with correct credentials" do
     connect
     @remote.list #force it to do something
@@ -47,14 +51,52 @@ describe Remote do
     connect
     does_exist = '/public_html'
     does_not_exist = '/blahdiblahblah'
-    @remote.dir_exists?(does_exist).should == true
-    @remote.dir_exists?(does_not_exist).should == false
+    @remote.exists?(does_exist).should == true
+    @remote.exists?(does_not_exist).should == false
+  end
+
+  it "should be able to see whether files exist" do
+    connect
+    does_exist = '/public_html/upload_testing/image.jpg'
+    does_not_exist = '/public_html/upload_testing/blahblahblah.jpg'
+    @remote.upload('test_files/file3.jpg', does_exist)
+    @remote.exists?(does_exist).should == true
+    @remote.exists?(does_not_exist).should == false
   end
 
   it "should make directory" do
     connect
     remote_path = '/public_html/upload_testing/testdir'
     @remote.make_dir remote_path
-    @remote.dir_exists?(remote_path).should == true
+    @remote.exists?(remote_path).should == true
   end
+
+  it "should remove a file" do
+    connect
+    local_path = 'test_files/file3.jpg'
+    remote_path = '/public_html/upload_testing/image.jpg'
+
+    @remote.upload(local_path, remote_path)
+    @remote.exists?(remote_path).should == true
+    @remote.remove_file(remote_path)
+    @remote.exists?(remote_path).should == false
+  end
+
+  it "should remove a directory" do
+    connect
+    remote_path = '/public_html/upload_testing/testdir'
+    @remote.make_dir remote_path
+    @remote.make_dir File.join(remote_path, 'subdir')
+    @remote.upload('test_files/file3.jpg', File.join(remote_path, 'subdir', 'image.jpg'))
+    @remote.remove_dir remote_path
+    @remote.exists?(remote_path).should == false
+  end
+
+  it "should create a directory for a file if needed" do
+    connect
+    remote_path = '/public_html/upload_testing/testdir/anotherdir/image.jpg'
+    @remote.upload('test_files/file3.jpg', remote_path)
+    @remote.exists?(remote_path).should == true
+  end
+
 end
