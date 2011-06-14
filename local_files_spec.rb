@@ -11,20 +11,20 @@ describe LocalFiles do
   end
 
   it "should ignore ignored prefixes" do
-    @local_files.ignore?('test_files/ignored_dir/testfile.txt').should == true
-    @local_files.ignore?('test_files/not_ignored_dir/testfile.txt').should == false
+    @local_files.ignore?('ignored_dir/testfile.txt').should == true
+    @local_files.ignore?('not_ignored_dir/testfile.txt').should == false
   end
 
   it "should ignore ignored prefxes" do
     files = @local_files.get_files
-    files.should_not include 'test_files/ignored_dir/file6.txt'
-    files.should include 'test_files/dir1/file4.txt'
+    files.should_not include 'ignored_dir/file6.txt'
+    files.should include 'dir1/file4.txt'
   end
 
   it "should ignore ignored suffixes" do
     files = @local_files.get_files
-    files.should_not include 'test_files/file.swp'
-    files.should include 'test_files/file.swp.txt'
+    files.should_not include 'file.swp'
+    files.should include 'file.swp.txt'
   end
 end
 
