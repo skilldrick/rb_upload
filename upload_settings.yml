@@ -1,1 +1,5 @@
-host: www.test.co.uk
+development:
+  host: ftp.test.co.uk
+
+production:
+  host: ftp.production.co.uk
