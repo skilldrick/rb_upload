@@ -1,5 +1,5 @@
 require 'rb_upload'
-require 'local_files'
+require 'local'
 
 describe RbUpload do
   before(:each) do
@@ -8,11 +8,11 @@ describe RbUpload do
 
   it "should pass correct params to LocalFiles" do
     return_val = ['a', 'b', 'c']
-    mock_local_files = mock('local_files')
-    mock_local_files.stub!(:get_files).and_return(return_val)
-    mock_local_files.should_receive(:get_files)
-    LocalFiles.stub!(:new).and_return(mock_local_files)
-    LocalFiles.should_receive(:new).with(
+    mock_local = mock('local')
+    mock_local.stub!(:get_files).and_return(return_val)
+    mock_local.should_receive(:get_files)
+    Local.stub!(:new).and_return(mock_local)
+    Local.should_receive(:new).with(
       instance_of(Array),
       instance_of(Array),
       instance_of(String)

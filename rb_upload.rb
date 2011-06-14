@@ -1,5 +1,5 @@
 require 'settings'
-require 'local_files'
+require 'local'
 
 class RbUpload
   attr_accessor :settings
@@ -9,10 +9,10 @@ class RbUpload
   end
 
   def get_local_files
-    @local_files = LocalFiles.new(
+    @local = Local.new(
       @settings.ignored_prefixes, @settings.ignored_suffixes, @settings.local_directory
     )
-    @local_files.get_files
+    @local.get_files
   end
 
 end

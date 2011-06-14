@@ -1,4 +1,4 @@
-class LocalFiles
+class Local
   attr_accessor :ignored_prefixes, :ignored_suffixes
 
   def initialize ignored_prefixes, ignored_suffixes, directory
