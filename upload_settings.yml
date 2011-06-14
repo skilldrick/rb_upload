@@ -1,6 +1,6 @@
 development:
   host: ftp.bookcraft.co.uk
-  directory: public_html/upload_testing
+  directory: /public_html/upload_testing
 
 production:
   host: ftp.production.co.uk
