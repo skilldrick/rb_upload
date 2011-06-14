@@ -1,4 +1,6 @@
-require "yaml"
+require 'yaml'
+require 'net/netrc'
+
 
 class RbUpload
   attr_accessor :settings
@@ -8,4 +10,13 @@ class RbUpload
       @settings = YAML::load(yf)
     end
   end
+
+  def getLogin(host)
+    rc = Net::Netrc.locate(host) or raise ".netrc not found"
+    rc.login
+  end
+end
+
+if __FILE__ == $0
+  upload = RbUpload.new
 end
