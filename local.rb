@@ -7,6 +7,10 @@ class Local
     @directory = directory
   end
 
+  def filesize path
+    File.size path
+  end
+
   def ignore? path
     path.start_with?(*@ignored_prefixes) || path.end_with?(*@ignored_suffixes)
   end

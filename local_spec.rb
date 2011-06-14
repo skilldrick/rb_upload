@@ -26,5 +26,9 @@ describe Local do
     files.should_not include 'file.swp'
     files.should include 'file.swp.txt'
   end
+
+  it "should get size of file" do
+    @local.filesize('test_files/file1.txt').should == 23
+  end
 end
 

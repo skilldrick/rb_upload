@@ -1,4 +1,5 @@
 require 'remote'
+require 'local'
 require 'settings'
 
 describe Remote do
