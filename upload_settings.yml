@@ -1,5 +1,5 @@
 development:
-  host: ftp.test.co.uk
+  host: ftp.bookcraft.co.uk
 
 production:
   host: ftp.production.co.uk

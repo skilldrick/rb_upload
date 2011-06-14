@@ -6,18 +6,18 @@ describe Settings, "when initialised" do
   end
 
   it "can read properties from yaml" do
-    @settings.development['host'].should == 'ftp.test.co.uk'
+    @settings.development['host'].should == 'ftp.bookcraft.co.uk'
   end
   
   it "has different hosts for different sites" do
     development_host = @settings.development['host']
     production_host = @settings.production['host']
-    development_host.should == 'ftp.test.co.uk'
+    development_host.should == 'ftp.bookcraft.co.uk'
     production_host.should == 'ftp.production.co.uk'
   end
 
   it "can access netrc" do
-    @settings.get_login_from_host('ftp.test.co.uk').should == 'nick'
+    @settings.get_credentials_from_host('ftp.test.co.uk').login.should == 'nick'
   end
 
   it "gets an array of ignored prefixes" do

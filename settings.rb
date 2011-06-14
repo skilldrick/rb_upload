@@ -17,9 +17,13 @@ class Settings
     end
   end
 
-  def get_login_from_host(host)
+  def get_credentials_from_site site_name
+    get_credentials_from_host site_data(site_name)['host']
+  end
+
+  def get_credentials_from_host(host)
     @netrc = Net::Netrc.locate(host) or raise ".netrc or host not found"
-    @netrc.login
+    @netrc
   end
 
   def method_missing msg
