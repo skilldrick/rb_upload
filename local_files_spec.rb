@@ -7,7 +7,7 @@ describe LocalFiles do
 
   it "should load a list of files in specified directory" do
     files = @local_files.get_files
-    files.count.should have_at_least(1).items
+    files.should have_at_least(1).items
   end
 
   it "should ignore ignored prefixes" do
