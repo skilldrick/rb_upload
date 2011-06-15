@@ -25,8 +25,13 @@ describe Settings, "when initialised" do
   end
 
   it "can set and read lastrun" do
-    time = Time.now.utc.to_s
-    @settings.lastrun = Time.now.utc.to_s
-    @settings.lastrun.should == time
+    time = Time.now.utc
+    @settings.lastrun = time
+    @settings.lastrun.should be_within(1).of(time)
+  end
+
+  it "returns -1 when no lastrun" do
+    File.delete '.lastrun'
+    @settings.lastrun.should == -1
   end
 end

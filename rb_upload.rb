@@ -1,13 +1,22 @@
 require 'settings'
 require 'local'
 require 'remote'
+require 'optparse'
 
 class RbUpload
-  attr_accessor :settings, :verbose, :comparison_mode
+  attr_accessor :settings, :verbose, :comparison_mode, :local
 
   def initialize
     @settings = Settings.new
     @site = 'development'
+  end
+
+  def comparison_mode= mode
+    if mode == :lastrun && @settings.lastrun == -1
+      @comparison_mode = :filesize
+    else
+      @comparison_mode = mode
+    end
   end
 
   def init_local
@@ -45,7 +54,7 @@ class RbUpload
     if @comparison_mode == :filesize
       return @remote.files_match?(local_path, remote_path) == :same_size
     elsif @comparison_mode == :lastrun
-      throw 'not implemented'
+      return Local.modified_time(local_path) < @settings.lastrun
     else
       return false
     end
@@ -76,12 +85,20 @@ class RbUpload
     files.each do |file|
       upload file
     end
+    @settings.lastrun = Time.now.utc
   end
 end
 
 if __FILE__ == $0
   upload = RbUpload.new
-  upload.verbose = true
-  upload.comparison_mode = :filesize
+
+  OptionParser.new do |opts|
+    opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
+      upload.verbose = v
+    end
+  end.parse!
+
+  #if lastrun doesn't exist use filesize
+  upload.comparison_mode = :lastrun
   upload.upload_all
 end

@@ -1,5 +1,6 @@
 require 'yaml'
 require 'net/netrc'
+require 'time'
 
 
 class Settings
@@ -16,8 +17,10 @@ class Settings
 
   def lastrun
     File.open(@@lastrun_filename) do |file|
-      file.read.chomp
+      Time.parse file.read.chomp
     end
+  rescue Errno::ENOENT
+    -1
   end
 
   def site_data site_name
