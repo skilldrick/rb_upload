@@ -19,6 +19,8 @@ class RbUpload
   def initialize
     @settings = Settings.new
     @site = 'development'
+    @success_count = 0
+    @error_count = 0
   end
 
   def comparison_mode= mode
@@ -80,12 +82,18 @@ class RbUpload
     end
     puts "Uploading #{local_path}" if @verbose
     status = @remote.upload(local_path, remote_path, :check_size)
-    if @verbose
-      if status == :different_size
+    if status == :different_size
+      if @verbose
         puts "Error with #{local_path} - sizes do not match"
-      elsif status == :remote_missing
+      end
+      @error_count += 1
+    elsif status == :remote_missing
+      if @verbose
         puts "Error with #{local_path} - #{remote_path} not found"
       end
+      @error_count += 1
+    else
+      @success_count += 1
     end
   end
 
@@ -96,25 +104,35 @@ class RbUpload
     files.each do |file|
       upload file
     end
+    if @verbose
+      puts
+      puts "-" * 50
+      puts
+      puts "Successfully uploaded #{@success_count} files."
+      puts "There were problems with #{@error_count} files.\n"
+    end
+
     @settings.lastrun = Time.now.utc
   end
 end
 
 if __FILE__ == $0
   upload = RbUpload.new
+
+  #set defaults:
   upload.site = 'development'
   upload.comparison_mode = :lastrun
   upload.verbose = true
 
   OptionParser.new do |opts|
-    opts.on("-q", "--[no-]quiet", "Run quietly") do |q|
-      upload.verbose = !v
+    opts.on("-q", "--quiet", "Run quietly") do
+      upload.verbose = false
     end
     opts.on("-s", "--site [SITE]", "Use specific SITE") do |site|
       upload.site = site
     end
-    opts.on("--[no-]filesize", "Upload based on filesize") do |fs|
-      upload.comparison_mode = :filesize if fs
+    opts.on("--filesize", "Upload based on filesize") do
+      upload.comparison_mode = :filesize
     end
   end.parse!
 
