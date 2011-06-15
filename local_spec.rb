@@ -34,5 +34,8 @@ describe Local do
   it "should get relative path, including local directory" do
     @local.get_relative_path('dir1/file4.txt').should == 'test_files/dir1/file4.txt'
   end
+
+  xit "can get local modified time" do
+  end
 end
 

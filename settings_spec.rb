@@ -23,4 +23,10 @@ describe Settings, "when initialised" do
   it "gets an array of ignored prefixes" do
     @settings.ignored_prefixes.should have_at_least(2).items
   end
+
+  xit "can set lastrun" do
+  end
+
+  xit "can read lastrun" do
+  end
 end

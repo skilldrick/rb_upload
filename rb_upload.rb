@@ -3,7 +3,7 @@ require 'local'
 require 'remote'
 
 class RbUpload
-  attr_accessor :settings, :verbose
+  attr_accessor :settings, :verbose, :comparison_mode
 
   def initialize
     @settings = Settings.new
@@ -30,13 +30,35 @@ class RbUpload
     @local.get_files
   end
 
-  def upload path
-    local_path = @local.get_relative_path path
+  def get_local_path path
+    @local.get_relative_path path
+  end
+
+  def get_remote_path path
     remote_base = @settings.site_data(@site)['directory']
-    remote_path = File.join(remote_base, path)
-    if @verbose
-      puts "Uploading #{local_path}"
+    File.join(remote_base, path)
+  end
+
+  def skip? path
+    local_path = get_local_path path
+    remote_path = get_remote_path path
+    if @comparison_mode == :filesize
+      return @remote.files_match?(local_path, remote_path) == :same_size
+    elsif @comparison_mode == :lastrun
+      throw 'not implemented'
+    else
+      return false
     end
+  end
+
+  def upload path
+    local_path = get_local_path path
+    remote_path = get_remote_path path
+    if skip? path
+      puts "Skipping #{local_path}" if @verbose
+      return
+    end
+    puts "Uploading #{local_path}" if @verbose
     status = @remote.upload(local_path, remote_path, :check_size)
     if @verbose
       if status == :different_size
@@ -60,5 +82,6 @@ end
 if __FILE__ == $0
   upload = RbUpload.new
   upload.verbose = true
+  upload.comparison_mode = :filesize
   upload.upload_all
 end

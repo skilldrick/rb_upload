@@ -88,21 +88,26 @@ class Remote
     end
 
     if option == :check_size
-      local_size = Local.filesize(from_path)
-      remote_size = filesize(to_path)
-      if remote_size == -1
-        return :remote_missing
-      elsif local_size == remote_size
-        return :same_size
-      else
-        return :different_size
-      end
+      return files_match? from_path, to_path
     end
 
   rescue Net::FTPPermError
     make_dir File.dirname(to_path)
     upload(from_path, to_path)
   end
+
+  def files_match? local_path, remote_path
+    local_size = Local.filesize(local_path)
+    remote_size = filesize(remote_path)
+    if remote_size == -1
+      return :remote_missing
+    elsif local_size == remote_size
+      return :same_size
+    else
+      return :different_size
+    end
+  end
+
 
   def ascii? file_path
     file_path.end_with?(*@@ascii_extensions)
