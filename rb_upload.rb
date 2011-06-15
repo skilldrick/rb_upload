@@ -1,8 +1,16 @@
 #!/usr/bin/env ruby1.8
 require 'rubygems'
-require 'settings'
-require 'local'
-require 'remote'
+
+#requires a relative path when script is executed via a symlink
+def relative_require path
+  require File.expand_path("../#{path}", File.readlink(__FILE__))
+rescue Errno::EINVAL
+  require path
+end
+
+relative_require 'settings'
+relative_require 'local'
+relative_require 'remote'
 require 'optparse'
 
 class RbUpload
