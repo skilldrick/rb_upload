@@ -26,16 +26,16 @@ describe Remote do
     connect
     local_path = 'test_files/file1.txt'
     remote_path = '/public_html/upload_testing/file1.txt'
-    same_size = @remote.upload(local_path, remote_path, :check_size)
-    same_size.should == true
+    status = @remote.upload(local_path, remote_path, :check_size)
+    status.should == :same_size
   end
 
   it "should upload binary file" do
     connect
     local_path = 'test_files/file3.jpg'
     remote_path = '/public_html/upload_testing/file3.jpg'
-    same_size = @remote.upload(local_path, remote_path, :check_size)
-    same_size.should == true
+    status = @remote.upload(local_path, remote_path, :check_size)
+    status.should == :same_size
   end
 
   it "should distinguish ascii from binary files" do
@@ -58,6 +58,13 @@ describe Remote do
     @remote.upload('test_files/file3.jpg', does_exist)
     @remote.exists?(does_exist).should == true
     @remote.exists?(does_not_exist).should == false
+  end
+
+  it "should signify missing file on filesize" do
+    connect
+    does_not_exist = '/public_html/upload_testing/blahblahblah.jpg'
+    retval = @remote.filesize does_not_exist
+    retval.should == -1
   end
 
   it "should make directory" do

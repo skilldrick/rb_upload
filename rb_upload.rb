@@ -37,9 +37,13 @@ class RbUpload
     if @verbose
       puts "Uploading #{local_path}"
     end
-    same_size = @remote.upload(local_path, remote_path, :check_size)
-    if !same_size && @verbose
-      puts "Error with #{local_path} - sizes do not match"
+    status = @remote.upload(local_path, remote_path, :check_size)
+    if @verbose
+      if status == :different_size
+        puts "Error with #{local_path} - sizes do not match"
+      elsif status == :remote_missing
+        puts "Error with #{local_path} - #{remote_path} not found"
+      end
     end
   end
 

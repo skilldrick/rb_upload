@@ -9,6 +9,8 @@ class Remote
 
   def filesize path
     @ftp.size path
+  rescue Net::FTPPermError
+    -1
   end
 
   def connect(credentials)
@@ -88,7 +90,13 @@ class Remote
     if option == :check_size
       local_size = Local.filesize(from_path)
       remote_size = filesize(to_path)
-      return local_size == remote_size
+      if remote_size == -1
+        return :remote_missing
+      elsif local_size == remote_size
+        return :same_size
+      else
+        return :different_size
+      end
     end
 
   rescue Net::FTPPermError
