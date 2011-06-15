@@ -9,6 +9,10 @@ class Local
     File.size path
   end
 
+  def self.modified_time path
+    File.mtime path
+  end
+
   def ignore? path
     path.start_with?(*@ignored_prefixes) || path.end_with?(*@ignored_suffixes)
   end

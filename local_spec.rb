@@ -35,7 +35,8 @@ describe Local do
     @local.get_relative_path('dir1/file4.txt').should == 'test_files/dir1/file4.txt'
   end
 
-  xit "can get local modified time" do
+  it "can get local modified time" do
+    Local.modified_time('test_files/file1.txt').should be_an_instance_of Time
   end
 end
 

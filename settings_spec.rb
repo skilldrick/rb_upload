@@ -24,9 +24,9 @@ describe Settings, "when initialised" do
     @settings.ignored_prefixes.should have_at_least(2).items
   end
 
-  xit "can set lastrun" do
-  end
-
-  xit "can read lastrun" do
+  it "can set and read lastrun" do
+    time = Time.now.utc.to_s
+    @settings.lastrun = Time.now.utc.to_s
+    @settings.lastrun.should == time
   end
 end

@@ -3,8 +3,21 @@ require 'net/netrc'
 
 
 class Settings
+  @@lastrun_filename = '.lastrun'
   def initialize
     load_yaml
+  end
+
+  def lastrun= time
+    File.open(@@lastrun_filename, 'w') do |file|
+      file << time << "\n"
+    end
+  end
+
+  def lastrun
+    File.open(@@lastrun_filename) do |file|
+      file.read.chomp
+    end
   end
 
   def site_data site_name
