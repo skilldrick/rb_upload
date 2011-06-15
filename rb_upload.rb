@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby1.8
 require 'rubygems'
+require 'pathname'
 
 #requires a relative path when script is executed via a symlink
 def relative_require path
-  require File.expand_path("../#{path}", File.readlink(__FILE__))
-rescue Errno::EINVAL
-  require path
+  realpath = Pathname.new(__FILE__).realpath #follow symlink
+  require File.expand_path("../#{path}", realpath)
 end
 
 relative_require 'settings'
