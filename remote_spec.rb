@@ -26,20 +26,16 @@ describe Remote do
     connect
     local_path = 'test_files/file1.txt'
     remote_path = '/public_html/upload_testing/file1.txt'
-    @remote.upload(local_path, remote_path)
-    local_size = Local.filesize local_path
-    remote_size = @remote.filesize remote_path
-    local_size.should == remote_size
+    same_size = @remote.upload(local_path, remote_path, :check_size)
+    same_size.should == true
   end
 
   it "should upload binary file" do
     connect
     local_path = 'test_files/file3.jpg'
     remote_path = '/public_html/upload_testing/file3.jpg'
-    @remote.upload(local_path, remote_path)
-    local_size = Local.filesize local_path
-    remote_size = @remote.filesize remote_path
-    local_size.should == remote_size
+    same_size = @remote.upload(local_path, remote_path, :check_size)
+    same_size.should == true
   end
 
   it "should distinguish ascii from binary files" do

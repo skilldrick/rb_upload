@@ -15,20 +15,24 @@ describe Local do
     @local.ignore?('not_ignored_dir/testfile.txt').should == false
   end
 
-  it "should ignore ignored prefxes" do
+  it "should ignore ignored prefixes" do
     files = @local.get_files
-    files.should_not include 'ignored_dir/file6.txt'
-    files.should include 'dir1/file4.txt'
+    files.should_not include('ignored_dir/file6.txt')
+    files.should include('dir1/file4.txt')
   end
 
   it "should ignore ignored suffixes" do
     files = @local.get_files
-    files.should_not include 'file.swp'
-    files.should include 'file.swp.txt'
+    files.should_not include('file.swp')
+    files.should include('file.swp.txt')
   end
 
   it "should get size of file" do
     Local.filesize('test_files/file1.txt').should == 22
+  end
+
+  it "should get relative path, including local directory" do
+    @local.get_relative_path('dir1/file4.txt').should == 'test_files/dir1/file4.txt'
   end
 end
 

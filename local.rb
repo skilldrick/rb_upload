@@ -1,6 +1,4 @@
 class Local
-  attr_accessor :ignored_prefixes, :ignored_suffixes
-
   def initialize ignored_prefixes, ignored_suffixes, directory
     @ignored_prefixes = ignored_prefixes
     @ignored_suffixes = ignored_suffixes
@@ -13,6 +11,10 @@ class Local
 
   def ignore? path
     path.start_with?(*@ignored_prefixes) || path.end_with?(*@ignored_suffixes)
+  end
+
+  def get_relative_path path
+    File.join @directory, path
   end
 
   def get_files

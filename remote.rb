@@ -1,8 +1,11 @@
 require 'net/ftp'
 
 class Remote
-  attr_accessor :connected
   @@ascii_extensions = ['txt',  'php', 'html']
+
+  def self.finalize id
+    close
+  end
 
   def filesize path
     @ftp.size path
@@ -75,12 +78,19 @@ class Remote
     @ftp.delete path
   end
 
-  def upload(from_path, to_path)
+  def upload(from_path, to_path, option=nil)
     if ascii? from_path
       @ftp.puttextfile(from_path, to_path)
     else
       @ftp.putbinaryfile(from_path, to_path)
     end
+
+    if option == :check_size
+      local_size = Local.filesize(from_path)
+      remote_size = filesize(to_path)
+      return local_size == remote_size
+    end
+
   rescue Net::FTPPermError
     make_dir File.dirname(to_path)
     upload(from_path, to_path)
