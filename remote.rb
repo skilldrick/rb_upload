@@ -24,7 +24,12 @@ class Remote
 
   def make_dir path
     unless exists? path
-      @ftp.mkdir path
+      begin
+        @ftp.mkdir path
+      rescue Net::FTPPermError      #if path can't be made
+        make_dir File.dirname(path) #make its parent
+        make_dir path               #then make it
+      end
     end
   end
 
@@ -60,7 +65,10 @@ class Remote
       end
     end
 
-    @ftp.rmdir path
+    begin
+      @ftp.rmdir path
+    rescue Net::FTPPermError
+    end
   end
 
   def remove_file path
@@ -73,6 +81,9 @@ class Remote
     else
       @ftp.putbinaryfile(from_path, to_path)
     end
+  rescue Net::FTPPermError
+    make_dir File.dirname(to_path)
+    upload(from_path, to_path)
   end
 
   def ascii? file_path

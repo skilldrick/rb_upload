@@ -71,6 +71,14 @@ describe Remote do
     @remote.exists?(remote_path).should == true
   end
 
+  it "should make directories recursively" do
+    connect
+    remote_path = '/public_html/upload_testing/a/b/c/d/e'
+    @remote.make_dir remote_path
+    @remote.exists?(remote_path).should == true
+    @remote.remove_dir('/public_html/upload_testing/a')
+  end
+
   it "should remove a file" do
     connect
     local_path = 'test_files/file3.jpg'
@@ -94,9 +102,9 @@ describe Remote do
 
   it "should create a directory for a file if needed" do
     connect
+    @remote.remove_dir '/public_html/upload_testing/testdir'
     remote_path = '/public_html/upload_testing/testdir/anotherdir/image.jpg'
     @remote.upload('test_files/file3.jpg', remote_path)
     @remote.exists?(remote_path).should == true
   end
-
 end
