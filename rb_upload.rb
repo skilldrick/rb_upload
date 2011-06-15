@@ -13,6 +13,7 @@ class RbUpload
 
   def comparison_mode= mode
     if mode == :lastrun && @settings.lastrun == -1
+      puts ".lastrun not found - reverting to filesize comparison"
       @comparison_mode = :filesize
     else
       @comparison_mode = mode
@@ -98,7 +99,6 @@ if __FILE__ == $0
     end
   end.parse!
 
-  #if lastrun doesn't exist use filesize
   upload.comparison_mode = :lastrun
   upload.upload_all
 end
