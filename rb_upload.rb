@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby1.8
+require 'rubygems'
 require 'settings'
 require 'local'
 require 'remote'
@@ -13,7 +15,7 @@ class RbUpload
 
   def comparison_mode= mode
     if mode == :lastrun && @settings.lastrun == -1
-      puts ".lastrun not found - reverting to filesize comparison"
+      puts ".lastrun not found - reverting to filesize comparison" if @verbose
       @comparison_mode = :filesize
     else
       @comparison_mode = mode
