@@ -8,7 +8,7 @@ production:
 
 ignored_prefixes:
   - 'ignored_dir'
-  - '.git'
+  - 'upload_settings.yml'
 
 ignored_suffixes:
   - '.swp'

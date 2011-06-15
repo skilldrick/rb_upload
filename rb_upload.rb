@@ -14,7 +14,7 @@ relative_require 'remote'
 require 'optparse'
 
 class RbUpload
-  attr_accessor :settings, :verbose, :comparison_mode, :local
+  attr_accessor :settings, :site, :verbose, :comparison_mode, :local
 
   def initialize
     @settings = Settings.new
@@ -102,13 +102,21 @@ end
 
 if __FILE__ == $0
   upload = RbUpload.new
+  upload.site = 'development'
+  upload.comparison_mode = :lastrun
+  upload.verbose = true
 
   OptionParser.new do |opts|
-    opts.on("-v", "--[no-]verbose", "Run verbosely") do |v|
-      upload.verbose = v
+    opts.on("-q", "--[no-]quiet", "Run quietly") do |q|
+      upload.verbose = !v
+    end
+    opts.on("-s", "--site [SITE]", "Use specific SITE") do |site|
+      upload.site = site
+    end
+    opts.on("--[no-]filesize", "Upload based on filesize") do |fs|
+      upload.comparison_mode = :filesize if fs
     end
   end.parse!
 
-  upload.comparison_mode = :lastrun
   upload.upload_all
 end
