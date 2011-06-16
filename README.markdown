@@ -8,9 +8,13 @@ Installation
 
 Run the following command:
 
-    sudo ln -s ./rb_upload.rb /usr/bin/rb_upload
+    sudo ln -s ./rb_upload.rb /usr/bin/rbup
 
-to add the executable to your PATH as `rb_upload`.
+to add the executable to your PATH as `rbup`.
+
+In Cygwin, add the following to your .bashrc:
+
+    alias rbup='/path/to/rb_upload/rb_upload.rb'
 
 Usage
 -----
