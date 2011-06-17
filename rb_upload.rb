@@ -19,7 +19,7 @@ class RbUpload
   def initialize
     @settings = Settings.new
     @site = 'development'
-    @success_count = 0
+    @upload_count = 0
     @error_count = 0
   end
 
@@ -87,13 +87,14 @@ class RbUpload
         puts "Error with #{local_path} - sizes do not match"
       end
       @error_count += 1
+      @upload_count += 1
     elsif status == :remote_missing
       if @verbose
         puts "Error with #{local_path} - #{remote_path} not found"
       end
       @error_count += 1
     else
-      @success_count += 1
+      @upload_count += 1
     end
   end
 
@@ -108,8 +109,17 @@ class RbUpload
       puts
       puts "-" * 50
       puts
-      puts "Successfully uploaded #{@success_count} files."
-      puts "There were problems with #{@error_count} files.\n"
+      if @upload_count > 0
+        puts "Uploaded #{@upload_count} files."
+      else
+        puts "No files uploaded."
+      end
+      if @error_count > 0
+        puts "There were problems with #{@error_count} files."
+      else
+        puts "No problem files."
+      end
+      puts
     end
 
     @settings.lastrun = Time.now.utc
