@@ -57,7 +57,9 @@ describe RbUpload do
   end
 
   it "should check lastrun if comparison_mode is lastrun" do
-    @upload.settings.stub!(:lastrun).and_return(Time.now)
+    mock_lastrun = mock('lastrun')
+    mock_lastrun.should_receive(:[]).any_number_of_times.and_return(Time.now)
+    @upload.settings.stub!(:lastrun).and_return(mock_lastrun)
     @upload.comparison_mode = :lastrun
     @upload.init_local
     Local.stub!(:modified_time).and_return(Time.now - 1)
@@ -71,13 +73,16 @@ describe RbUpload do
     mock_remote.should_receive(:connect)
     mock_remote.should_receive(:close)
     Remote.stub!(:new).and_return(mock_remote)
-    @upload.settings.stub!(:lastrun=)
-    @upload.settings.should_receive(:lastrun=).exactly(1).times
+    mock_lastrun = mock('lastrun')
+    mock_lastrun.should_receive(:[]=).exactly(1).times
+    @upload.settings.stub!(:lastrun).and_return(mock_lastrun)
     @upload.upload_all
   end
 
   it "should use filesize comparison if no lastrun" do
-    @upload.settings.stub!(:lastrun).and_return(-1)
+    mock_lastrun = mock('lastrun')
+    mock_lastrun.should_receive(:[]).and_return(-1)
+    @upload.settings.stub!(:lastrun).and_return(mock_lastrun)
     @upload.comparison_mode = :lastrun
     @upload.comparison_mode.should == :filesize
   end

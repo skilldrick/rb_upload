@@ -26,12 +26,23 @@ describe Settings, "when initialised" do
 
   it "can set and read lastrun" do
     time = Time.now.utc
-    @settings.lastrun = time
-    @settings.lastrun.should be_within(1).of(time)
+    @settings.lastrun['development'] = time
+    @settings.lastrun['development'].should be_within(1).of(time) #time gets rounded in @settings
   end
 
   it "returns -1 when no lastrun" do
-    File.delete '.lastrun'
-    @settings.lastrun.should == -1
+    File.delete '.lastrun_development'
+    File.delete '.lastrun_production'
+    @settings.lastrun['development'].should == -1
+    @settings.lastrun['production'].should == -1
+  end
+
+  it "should have separate .lastrun for each site" do
+    time1 = Time.now.utc
+    time2 = Time.now.utc + 20
+    @settings.lastrun['development'] = time1
+    @settings.lastrun['production'] = time2
+    @settings.lastrun['development'].should be_within(1).of(time1)
+    @settings.lastrun['production'].should be_within(1).of(time2)
   end
 end

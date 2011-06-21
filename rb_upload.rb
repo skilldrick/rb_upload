@@ -24,7 +24,7 @@ class RbUpload
   end
 
   def comparison_mode= mode
-    if mode == :lastrun && @settings.lastrun == -1
+    if mode == :lastrun && @settings.lastrun[@site] == -1
       puts ".lastrun not found - reverting to filesize comparison" if @verbose
       @comparison_mode = :filesize
     else
@@ -67,7 +67,7 @@ class RbUpload
     if @comparison_mode == :filesize
       return @remote.files_match?(local_path, remote_path) == :same_size
     elsif @comparison_mode == :lastrun
-      return Local.modified_time(local_path) < @settings.lastrun
+      return Local.modified_time(local_path) < @settings.lastrun[@site]
     else
       return false
     end
@@ -122,7 +122,7 @@ class RbUpload
       puts
     end
 
-    @settings.lastrun = Time.now.utc
+    @settings.lastrun[@site] = Time.now.utc
   end
 end
 

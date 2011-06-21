@@ -4,23 +4,12 @@ require 'time'
 
 
 class Settings
-  @@lastrun_filename = '.lastrun'
   def initialize
     load_yaml
   end
 
-  def lastrun= time
-    File.open(@@lastrun_filename, 'w') do |file|
-      file << time << "\n"
-    end
-  end
-
   def lastrun
-    File.open(@@lastrun_filename) do |file|
-      Time.parse file.read.chomp
-    end
-  rescue Errno::ENOENT
-    -1
+    Lastrun.new
   end
 
   def site_data site_name
@@ -47,6 +36,23 @@ class Settings
   end
 end
 
-if __FILE__ == $0
-  upload = RbUpload.new
+class Lastrun
+  @@lastrun_prefix = '.lastrun'
+
+  def []= key, time
+    filename = "#{@@lastrun_prefix}_#{key}"
+    File.open(filename, 'w') do |file|
+      file << time << "\n"
+    end
+  end
+
+  def [] key
+    filename = "#{@@lastrun_prefix}_#{key}"
+    File.open(filename) do |file|
+      Time.parse file.read.chomp
+    end
+  rescue Errno::ENOENT
+    -1
+  end
 end
+
