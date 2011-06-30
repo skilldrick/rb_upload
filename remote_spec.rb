@@ -1,6 +1,12 @@
-require 'remote'
-require 'local'
-require 'settings'
+#requires a relative path when script is executed possibly via a symlink
+def relative_require path
+  realpath = Pathname.new(__FILE__).realpath #follow symlink
+  require File.expand_path("../#{path}", realpath)
+end
+
+relative_require 'remote'
+relative_require 'local'
+relative_require 'settings'
 
 describe Remote do
   def connect
