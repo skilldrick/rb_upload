@@ -1,6 +1,12 @@
-require 'rb_upload'
-require 'local'
-require 'remote'
+#requires a relative path when script is executed possibly via a symlink
+def relative_require path
+  realpath = Pathname.new(__FILE__).realpath #follow symlink
+  require File.expand_path("../#{path}", realpath)
+end
+
+relative_require 'rb_upload'
+relative_require 'local'
+relative_require 'remote'
 
 describe RbUpload do
   before(:each) do

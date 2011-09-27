@@ -8,7 +8,7 @@ Installation
 
 Run the following command:
 
-    sudo ln -s ./rb_upload.rb /usr/bin/rbup
+    sudo ln -s `pwd`/rb_upload.rb /usr/local/bin/rbup
 
 to add the executable to your PATH as `rbup`.
 
