@@ -10,7 +10,7 @@ class Local
   end
 
   def self.modified_time path
-    File.mtime path
+    File.mtime(path).utc
   end
 
   def ignore? path
