@@ -52,7 +52,7 @@ class Lastrun
       Time.parse file.read.chomp
     end
   rescue Errno::ENOENT
-    -1
+    Time.at(0) #set time to start of Unix epoch if no lastrun file
   end
 end
 
